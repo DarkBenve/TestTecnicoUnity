@@ -5,6 +5,9 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(BoxCollider))]
 public class SwipeMovement : MonoBehaviour
 {
+    [Header("References")] 
+    [SerializeField] private GameManager gameManager;
+    
     [Header("Movement")]
     [SerializeField, Min(0.01f)] private float moveSpeed = 8f;
 
@@ -29,7 +32,7 @@ public class SwipeMovement : MonoBehaviour
     private void Awake()
     {
         boxCollider = GetComponent<BoxCollider>();
-
+        gameManager.EndGame += StopMoving;
         if (inputCamera == null)
         {
             inputCamera = Camera.main;
