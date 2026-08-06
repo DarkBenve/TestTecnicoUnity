@@ -7,3 +7,5 @@ Ho scelto questo sistema di controllo perché permette di giocare allo stesso mo
 Sono riuscito a implementare tutte le meccaniche principali che avevo previsto per il gameplay, aggiungendo anche tre feedback visivi per rendere l'esperienza più chiara e piacevole.
 
 L'aspetto che migliorerei maggiormente riguarda il menu principale e la schermata dei risultati finali. Al momento sono molto essenziali e composti principalmente da semplici testi, senza particolari feedback visivi o animazioni. Ho preferito concentrare il tempo a disposizione sul gameplay.
+
+Ultima cosa che risolverei piccolo glitch che si verifica in build quando la telecamera trema
