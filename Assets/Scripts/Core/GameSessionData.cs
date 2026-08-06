@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class GameSessionData : SingletonBehaviour<GameSessionData>
@@ -8,6 +9,8 @@ public class GameSessionData : SingletonBehaviour<GameSessionData>
     public int CurrentSwipeCount { get; private set; }
     public int BestScore { get; private set; }
     public bool IsGameInProgress { get; private set; }
+
+    public event Action<int> ScoreChanged;
 
     protected override void Awake()
     {
@@ -37,6 +40,7 @@ public class GameSessionData : SingletonBehaviour<GameSessionData>
         CurrentScore = 0;
         CurrentSwipeCount = 0;
         IsGameInProgress = true;
+        ScoreChanged?.Invoke(CurrentScore);
     }
 
     public void RegisterSwipe()
@@ -52,6 +56,7 @@ public class GameSessionData : SingletonBehaviour<GameSessionData>
         if (IsGameInProgress)
         {
             CurrentScore = Mathf.Max(0, CurrentScore + amount);
+            ScoreChanged?.Invoke(CurrentScore);
         }
     }
 
@@ -60,6 +65,7 @@ public class GameSessionData : SingletonBehaviour<GameSessionData>
         if (IsGameInProgress)
         {
             CurrentScore = Mathf.Max(0, score);
+            ScoreChanged?.Invoke(CurrentScore);
         }
     }
 
