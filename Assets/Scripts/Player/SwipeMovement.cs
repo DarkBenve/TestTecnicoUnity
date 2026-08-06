@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -31,6 +32,8 @@ public class SwipeMovement : MonoBehaviour
     private bool inputEnabled = true;
 
     public bool IsMoving { get; private set; }
+
+    public event Action WallHit;
 
     private void Awake()
     {
@@ -71,6 +74,7 @@ public class SwipeMovement : MonoBehaviour
 
         if (wallFound)
         {
+            WallHit?.Invoke();
             FinishMovement();
         }
     }

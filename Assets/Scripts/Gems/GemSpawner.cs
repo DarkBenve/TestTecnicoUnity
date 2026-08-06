@@ -30,6 +30,8 @@ public class GemSpawner : MonoBehaviour
     private float nextSpawnTime;
     private bool isSpawning = true;
 
+    public event System.Action GemCollected;
+
     private void Awake()
     {
         if (gameManager == null)
@@ -93,6 +95,7 @@ public class GemSpawner : MonoBehaviour
             GameSessionData.GetOrCreate().AddScore(pointsPerGem);
         }
 
+        GemCollected?.Invoke();
         Destroy(gem.gameObject);
         nextSpawnTime = Time.time + respawnDelay;
     }

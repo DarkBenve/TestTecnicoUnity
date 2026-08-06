@@ -4304,6 +4304,61 @@ MonoBehaviour:
   rotationSpeed: 90
   hoverHeight: 0.12
   hoverSpeed: 2
+--- !u!1 &2110000000
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2110000001}
+  - component: {fileID: 2110000002}
+  m_Layer: 0
+  m_Name: GameplayFeedback
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2110000001
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2110000000}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2110000002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2110000000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 754da030336942aa94a32ab707f1d932, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  playerMovement: {fileID: 1835722795}
+  gemSpawner: {fileID: 2100000002}
+  playerRenderer: {fileID: 1835722792}
+  gameplayCamera: {fileID: 426023865}
+  sceneLight: {fileID: 1733494694}
+  wallShakeDuration: 0.12
+  wallShakeAmount: 0.1
+  wallFlashColor: {r: 1, g: 0.35, b: 0.2, a: 1}
+  gemFlashColor: {r: 0.1, g: 1, b: 0.8, a: 1}
+  flashDuration: 0.3
+  lightIntensityMultiplier: 1.6
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -4322,3 +4377,4 @@ SceneRoots:
   - {fileID: 979770316}
   - {fileID: 382464287}
   - {fileID: 2100000001}
+  - {fileID: 2110000001}
