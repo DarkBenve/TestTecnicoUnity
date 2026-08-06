@@ -25,7 +25,10 @@ public class SwipeMovement : MonoBehaviour
     private BoxCollider boxCollider;
     private Vector2 swipeStartPosition;
     private Vector3 moveDirection;
+    private Vector3 bufferedDirection;
     private bool isTrackingSwipe;
+    private bool hasBufferedDirection;
+    private bool inputEnabled = true;
 
     public bool IsMoving { get; private set; }
 
@@ -40,7 +43,7 @@ public class SwipeMovement : MonoBehaviour
 
         if (gameManager != null)
         {
-            gameManager.EndGame += StopMoving;
+            gameManager.EndGame += HandleEndGame;
         }
 
         if (inputCamera == null)
@@ -68,12 +71,17 @@ public class SwipeMovement : MonoBehaviour
 
         if (wallFound)
         {
-            StopMoving();
+            FinishMovement();
         }
     }
 
     private void ReadSwipeInput()
     {
+        if (!inputEnabled)
+        {
+            return;
+        }
+
         Pointer pointer = Pointer.current;
 
         if (pointer == null)
@@ -83,7 +91,7 @@ public class SwipeMovement : MonoBehaviour
 
         if (pointer.press.wasPressedThisFrame)
         {
-            if (IsMoving)
+            if (IsMoving && hasBufferedDirection)
             {
                 isTrackingSwipe = false;
                 return;
@@ -106,7 +114,7 @@ public class SwipeMovement : MonoBehaviour
             return;
         }
 
-        BeginMovement(GetWorldDirection(swipe));
+        QueueOrBeginMovement(GetWorldDirection(swipe));
     }
 
     private Vector3 GetWorldDirection(Vector2 swipe)
@@ -141,10 +149,17 @@ public class SwipeMovement : MonoBehaviour
             : Vector3.forward * Mathf.Sign(screenAxis.z);
     }
 
-    private void BeginMovement(Vector3 direction)
+    private void QueueOrBeginMovement(Vector3 direction)
     {
-        moveDirection = direction.normalized;
-        IsMoving = true;
+        if (IsMoving)
+        {
+            bufferedDirection = direction;
+            hasBufferedDirection = true;
+        }
+        else
+        {
+            BeginMovement(direction);
+        }
 
         if (gameManager != null)
         {
@@ -154,6 +169,12 @@ public class SwipeMovement : MonoBehaviour
         {
             GameSessionData.GetOrCreate().RegisterSwipe();
         }
+    }
+
+    private void BeginMovement(Vector3 direction)
+    {
+        moveDirection = direction.normalized;
+        IsMoving = true;
     }
 
     private float GetAllowedDistance(float desiredDistance, out bool wallFound)
@@ -207,23 +228,52 @@ public class SwipeMovement : MonoBehaviour
         return allowedDistance;
     }
 
-    private void StopMoving()
+    private void FinishMovement()
+    {
+        StopCurrentMovement();
+
+        if (!inputEnabled || !hasBufferedDirection)
+        {
+            return;
+        }
+
+        Vector3 nextDirection = bufferedDirection;
+        ClearBufferedDirection();
+        BeginMovement(nextDirection);
+    }
+
+    private void StopCurrentMovement()
     {
         IsMoving = false;
         moveDirection = Vector3.zero;
     }
 
+    private void ClearBufferedDirection()
+    {
+        hasBufferedDirection = false;
+        bufferedDirection = Vector3.zero;
+    }
+
+    private void HandleEndGame()
+    {
+        inputEnabled = false;
+        isTrackingSwipe = false;
+        ClearBufferedDirection();
+        StopCurrentMovement();
+    }
+
     private void OnDisable()
     {
         isTrackingSwipe = false;
-        StopMoving();
+        ClearBufferedDirection();
+        StopCurrentMovement();
     }
 
     private void OnDestroy()
     {
         if (gameManager != null)
         {
-            gameManager.EndGame -= StopMoving;
+            gameManager.EndGame -= HandleEndGame;
         }
     }
 

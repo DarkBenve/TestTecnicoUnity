@@ -27,13 +27,9 @@ public class GemSpawner : MonoBehaviour
     private readonly HashSet<int> occupiedSpawnPoints = new HashSet<int>();
     private readonly List<int> availableSpawnPoints = new List<int>();
 
-    private Mesh runtimeGemMesh;
     private Material runtimeGemMaterial;
     private float nextSpawnTime;
     private bool isSpawning = true;
-
-    public int MaxActiveGems => maxActiveGems;
-    public int ActiveGemCount => activeGems.Count;
 
     private void Awake()
     {
@@ -68,7 +64,7 @@ public class GemSpawner : MonoBehaviour
 
         if (gemPrefab == null)
         {
-            CreateRuntimeGemAssets();
+            CreateRuntimeGemMaterial();
         }
 
         SpawnUntilFull();
@@ -167,46 +163,26 @@ public class GemSpawner : MonoBehaviour
 
     private GemPickup CreateRuntimeGem(Vector3 position)
     {
-        GameObject gemObject = new GameObject("Gem");
+        GameObject gemObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        gemObject.name = "Gem";
         gemObject.transform.SetParent(transform);
-        gemObject.transform.SetPositionAndRotation(position, Quaternion.identity);
+        gemObject.transform.SetPositionAndRotation(position, Quaternion.Euler(45f, 45f, 0f));
         gemObject.transform.localScale = gemScale;
 
-        MeshFilter meshFilter = gemObject.AddComponent<MeshFilter>();
-        meshFilter.sharedMesh = runtimeGemMesh;
+        Collider gemCollider = gemObject.GetComponent<Collider>();
+        if (gemCollider != null)
+        {
+            Destroy(gemCollider);
+        }
 
-        MeshRenderer meshRenderer = gemObject.AddComponent<MeshRenderer>();
+        MeshRenderer meshRenderer = gemObject.GetComponent<MeshRenderer>();
         meshRenderer.sharedMaterial = runtimeGemMaterial;
 
         return gemObject.AddComponent<GemPickup>();
     }
 
-    private void CreateRuntimeGemAssets()
+    private void CreateRuntimeGemMaterial()
     {
-        runtimeGemMesh = new Mesh { name = "Runtime Gem Mesh" };
-        runtimeGemMesh.vertices = new[]
-        {
-            new Vector3(0f, 1f, 0f),
-            new Vector3(0f, -1f, 0f),
-            new Vector3(1f, 0f, 0f),
-            new Vector3(0f, 0f, 1f),
-            new Vector3(-1f, 0f, 0f),
-            new Vector3(0f, 0f, -1f)
-        };
-        runtimeGemMesh.triangles = new[]
-        {
-            0, 2, 3,
-            0, 3, 4,
-            0, 4, 5,
-            0, 5, 2,
-            1, 3, 2,
-            1, 4, 3,
-            1, 5, 4,
-            1, 2, 5
-        };
-        runtimeGemMesh.RecalculateNormals();
-        runtimeGemMesh.RecalculateBounds();
-
         Shader gemShader = Shader.Find("Universal Render Pipeline/Lit");
         if (gemShader == null)
         {
@@ -214,18 +190,7 @@ public class GemSpawner : MonoBehaviour
         }
 
         runtimeGemMaterial = new Material(gemShader) { name = "Runtime Gem Material" };
-        runtimeGemMaterial.color = gemColor;
-
-        if (runtimeGemMaterial.HasProperty("_BaseColor"))
-        {
-            runtimeGemMaterial.SetColor("_BaseColor", gemColor);
-        }
-
-        if (runtimeGemMaterial.HasProperty("_EmissionColor"))
-        {
-            runtimeGemMaterial.EnableKeyword("_EMISSION");
-            runtimeGemMaterial.SetColor("_EmissionColor", gemColor * 1.5f);
-        }
+        runtimeGemMaterial.SetColor("_BaseColor", gemColor);
     }
 
     private void StopSpawning()
@@ -238,11 +203,6 @@ public class GemSpawner : MonoBehaviour
         if (gameManager != null)
         {
             gameManager.EndGame -= StopSpawning;
-        }
-
-        if (runtimeGemMesh != null)
-        {
-            Destroy(runtimeGemMesh);
         }
 
         if (runtimeGemMaterial != null)
