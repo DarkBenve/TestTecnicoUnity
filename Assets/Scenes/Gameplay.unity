@@ -4276,7 +4276,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameManager: {fileID: 759931645}
   player: {fileID: 1835722794}
-  gemPrefab: {fileID: -4116264246889059332, guid: a68f73820474f464888d149182ee5198, type: 3}
   spawnPoints:
   - {x: 1, y: 1, z: -7}
   - {x: 2, y: 1, z: -6}

@@ -6,7 +6,6 @@ public class GemSpawner : MonoBehaviour
     [Header("References")]
     [SerializeField] private GameManager gameManager;
     [SerializeField] private Transform player;
-    [SerializeField] private GemPickup gemPrefab;
 
     [Header("Spawn Points")]
     [SerializeField] private List<Vector3> spawnPoints = new List<Vector3>();
@@ -62,11 +61,7 @@ public class GemSpawner : MonoBehaviour
             return;
         }
 
-        if (gemPrefab == null)
-        {
-            CreateRuntimeGemMaterial();
-        }
-
+        CreateRuntimeGemMaterial();
         SpawnUntilFull();
     }
 
@@ -121,9 +116,7 @@ public class GemSpawner : MonoBehaviour
         int spawnPointIndex = availableSpawnPoints[randomListIndex];
         Vector3 spawnPosition = transform.TransformPoint(spawnPoints[spawnPointIndex]);
 
-        GemPickup gem = gemPrefab != null
-            ? Instantiate(gemPrefab, spawnPosition, Quaternion.identity, transform)
-            : CreateRuntimeGem(spawnPosition);
+        GemPickup gem = CreateRuntimeGem(spawnPosition);
 
         gem.Initialize(
             this,
