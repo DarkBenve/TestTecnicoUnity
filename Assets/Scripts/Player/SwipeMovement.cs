@@ -32,7 +32,17 @@ public class SwipeMovement : MonoBehaviour
     private void Awake()
     {
         boxCollider = GetComponent<BoxCollider>();
-        gameManager.EndGame += StopMoving;
+
+        if (gameManager == null)
+        {
+            gameManager = FindFirstObjectByType<GameManager>();
+        }
+
+        if (gameManager != null)
+        {
+            gameManager.EndGame += StopMoving;
+        }
+
         if (inputCamera == null)
         {
             inputCamera = Camera.main;
@@ -135,6 +145,15 @@ public class SwipeMovement : MonoBehaviour
     {
         moveDirection = direction.normalized;
         IsMoving = true;
+
+        if (gameManager != null)
+        {
+            gameManager.RegisterSwipe();
+        }
+        else
+        {
+            GameSessionData.GetOrCreate().RegisterSwipe();
+        }
     }
 
     private float GetAllowedDistance(float desiredDistance, out bool wallFound)
@@ -198,6 +217,14 @@ public class SwipeMovement : MonoBehaviour
     {
         isTrackingSwipe = false;
         StopMoving();
+    }
+
+    private void OnDestroy()
+    {
+        if (gameManager != null)
+        {
+            gameManager.EndGame -= StopMoving;
+        }
     }
 
     private void OnValidate()

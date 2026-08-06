@@ -467,6 +467,7 @@ GameObject:
   - component: {fileID: 667825533}
   - component: {fileID: 667825535}
   - component: {fileID: 667825534}
+  - component: {fileID: 667825536}
   m_Layer: 5
   m_Name: BestScore
   m_TagString: Untagged
@@ -592,6 +593,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 667825532}
   m_CullTransparentMesh: 1
+--- !u!114 &667825536
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 667825532}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 226f416707e0480bb70884956e9db43e, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  bestScoreText: {fileID: 667825534}
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -653,6 +667,7 @@ GameObject:
   - component: {fileID: 869424035}
   - component: {fileID: 869424034}
   - component: {fileID: 869424033}
+  - component: {fileID: 869424037}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -744,6 +759,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &869424037
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 869424032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f301ca4b3c64315af30ead69cd80b15, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
 --- !u!1 &1072648184
 GameObject:
   m_ObjectHideFlags: 0
@@ -962,7 +989,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1558199454}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 869424037}
+        m_TargetAssemblyTypeName: SceneNavigator, Assembly-CSharp
+        m_MethodName: StartGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument:
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1558199454
 MonoBehaviour:
   m_ObjectHideFlags: 0

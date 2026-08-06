@@ -14,9 +14,16 @@ public class GameManager : MonoBehaviour
     public event Action EndGame;
     
     private GameTimer timer;
+    private GameSessionData sessionData;
 
     private void Awake()
     {
+        sessionData = GameSessionData.GetOrCreate();
+        if (!sessionData.IsGameInProgress)
+        {
+            sessionData.BeginNewGame();
+        }
+
         timer = new GameTimer(gameTimerDuration);
         timer.OnFinish += OnFinishGame;
         EndGame += timer.Pause;
@@ -31,11 +38,23 @@ public class GameManager : MonoBehaviour
     private void Update()
     {
         timer.Update();
-        timerUI.UpdateTimer(timer.RemainingTime);
+
+        if (timerUI != null)
+        {
+            timerUI.UpdateTimer(timer.RemainingTime);
+        }
     }
 
     private void OnFinishGame()
     {
         EndGame?.Invoke();
+        sessionData.CompleteGame();
+        SceneNavigator.LoadResultScene();
     }
+
+    public void RegisterSwipe() => sessionData.RegisterSwipe();
+
+    public void AddScore(int amount) => sessionData.AddScore(amount);
+
+    public void SetScore(int score) => sessionData.SetScore(score);
 }

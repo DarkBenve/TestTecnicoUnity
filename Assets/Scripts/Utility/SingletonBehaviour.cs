@@ -9,8 +9,9 @@ public abstract class SingletonBehaviour<T> : MonoBehaviour where T : SingletonB
         if (Instance == null)
         {
             Instance = (T)this;
+            DontDestroyOnLoad(gameObject);
         }
-        else
+        else if (Instance != this)
         {
             Destroy(gameObject);
         }
